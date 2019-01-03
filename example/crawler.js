@@ -4,7 +4,7 @@ const Buffer  = require('buffer').Buffer
 const detectCharacterEncoding = require('detect-character-encoding')
 const charset = require('charset')
 const _ = require('lodash')
-const getArticle = require('../src')
+const htmlArticleExtractor = require('../src')
 
 const iconv = require('iconv-lite') 
 
@@ -63,10 +63,13 @@ async function run () {
         'http://wishgone.tistory.com/entry/%EC%97%98%EB%9D%BC%EC%8A%A4%ED%8B%B1%EC%84%9C%EC%B9%98-elasticsearch-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EA%B4%80%EB%A0%A8-%EA%B3%B5%EC%8B%9D-%ED%99%88%ED%94%BC-%EB%B2%88%EC%97%AD',
         'https://news.joins.com/article/23258019?cloc=joongang|home|newslist1'
     ]
+    
     for (let i=0;i<urls.length;i++) {
         await crawling(urls[i])
     }
+    
 }
+
 async function crawling (url) {
     console.log('========================================================')
     console.log('>> url', url)
@@ -76,8 +79,8 @@ async function crawling (url) {
     const dom = new JSDOM(text)
     let window = dom.window
     let document = window.document
-    const article = getArticle(document.body)
-    console.log('>> result', _.get(article, 'text', ''))
+    const article = htmlArticleExtractor(document.body)
+    console.log('>> result', article.text)
     console.log('========================================================')
 }
 
