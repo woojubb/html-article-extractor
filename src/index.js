@@ -1,31 +1,44 @@
-let best = {}
+let best = null
 
 function getArticle (dom) {
     initBestArticle()
     analyzeNode(dom)
-    return best
+    if (!best || !best.node) {
+        return {
+            html: '',
+            text: ''
+        }
+    }
+    return {
+        html: best.node.innerHTML,
+        text: best.text
+    }
 }
 
 function initBestArticle () {
     best = {
+        node: null,
         count: -1,
-        countTagType: -1,
-        countTag: -1
+        score: -1
     }
 }
 
 function analyzeNode(node){
-	const { childNodes } = node
+    const { childNodes } = node
 	for (let i=0; i < childNodes.length; i++){
         const { tagName, nodeType } = childNodes[i]
 		if (nodeType == 1){
-			if (['DIV', 'ARTICLE', 'SECTION'].includes(tagName)){
+			if (['DIV', 'ARTICLE', 'SECTION', 'SPAN'].includes(tagName)){
                 const info = getInfo(childNodes[i]);
                 if (info) {
-                    const score1 = best.count / best.countTagType / best.countTag
-                    const score2 = info.count / info.countTagType / info.countTag
-                    if (info.countTag > 0 && best.count < info.count && score1 < score2){
-                        best = info
+                    const currentScore = info.count / info.countTagType / info.countTag
+                    if (info.countTag > 0 && best.count < info.count && best.score < currentScore){
+                        best = {
+                            node: childNodes[i],
+                            text: info.text,
+                            count: info.count,
+                            score: currentScore
+                        }
                     } 
                 }
 			}
@@ -109,7 +122,7 @@ function getChildrenInfo (parent) {
 }
 function getInfo (parent) {
     let node = parent.cloneNode(true)
-    node.innerHTML = strip_tags(node.innerHTML, '<a><p></p><br><div><li><ol><ul><dl><script><style>')
+    node.innerHTML = strip_tags(node.innerHTML, '<a><p><span><br><div><li><ol><ul><dl><script><style>')
     let obj = cleanChildrenNode(node, 3)
     let text = cleanText(strip_tags(obj.innerHTML))
     const info = getChildrenInfo(obj)
@@ -117,7 +130,7 @@ function getInfo (parent) {
     if (count === 1) {
         return null
     }
-    const tags = ['DIV', 'UL', 'LI', 'OL', 'DL']
+    const tags = ['DIV', 'UL', 'LI', 'OL', 'DL', 'SPAN']
     let countTag = 0
     for (let i=0;i<tags.length;i++) {
         countTag += info.tag[tags[i]] || 0
