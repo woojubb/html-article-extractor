@@ -59,11 +59,17 @@ async function run () {
         'http://biz.chosun.com/site/data/html_dir/2019/01/02/2019010202230.html',
         'https://news.naver.com/main/read.nhn?mode=LSD&mid=sec&sid1=100&oid=001&aid=0010558528',
         'http://www.enewstoday.co.kr/news/articleView.html?idxno=1259522',
-        'https://m.blog.naver.com/PostView.nhn?blogId=jeuncc&logNo=221428966405&navType=tl',
-        'http://wishgone.tistory.com/entry/%EC%97%98%EB%9D%BC%EC%8A%A4%ED%8B%B1%EC%84%9C%EC%B9%98-elasticsearch-%EB%A9%94%EB%AA%A8%EB%A6%AC-%EA%B4%80%EB%A0%A8-%EA%B3%B5%EC%8B%9D-%ED%99%88%ED%94%BC-%EB%B2%88%EC%97%AD',
-        'https://news.joins.com/article/23258019?cloc=joongang|home|newslist1'
+        'https://news.joins.com/article/23258019?cloc=joongang|home|newslist1',
+        'http://www.ddaily.co.kr/news/article.html?no=176561',
+        'http://news.hankyung.com/article/201901038780g',
+        'http://www.etoday.co.kr/news/section/newsview.php?idxno=1706769',
+        'http://news.mk.co.kr/newsRead.php?year=2019&no=4529',
+        'http://www.inews24.com/view/1149222',
+        'http://www.newsis.com/view/?id=NISX20190103_0000519767&cID=13001&pID=13000',
+        'http://www.segye.com/newsView/20190103000690',
+        'http://www.ddaily.co.kr/news/article.html?no=176561',
+        'http://www.segye.com/newsView/20190103000690'
     ]
-    
     for (let i=0;i<urls.length;i++) {
         await crawling(urls[i])
     }
