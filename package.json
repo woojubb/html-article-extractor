@@ -1,0 +1,30 @@
+{
+  "name": "html-article-extractor",
+  "version": "1.0.0",
+  "description": "A web page content extractor",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/app.js"
+  },
+  "keywords": [
+    "article",
+    "contents",
+    "extract",
+    "crawler",
+    "html"
+  ],
+  "author": "jungyoun@gmail.com",
+  "license": "MIT",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "request": "^2.88.0",
+    "jsdom": "^13.1.0",
+    "lodash": "^4.17.11",
+    "buffer": "^5.2.1",
+    "charset": "^1.0.1",
+    "iconv-lite": "^0.4.24",
+    "detect-character-encoding": "^0.7.0"
+  }
+}
