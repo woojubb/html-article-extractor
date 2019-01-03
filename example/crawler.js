@@ -68,8 +68,16 @@ async function run () {
         'http://www.newsis.com/view/?id=NISX20190103_0000519767&cID=13001&pID=13000',
         'http://www.segye.com/newsView/20190103000690',
         'http://www.ddaily.co.kr/news/article.html?no=176561',
-        'http://www.segye.com/newsView/20190103000690'
+        'http://www.etnews.com/20190102000293',
+        'http://news.khan.co.kr/kh_news/khan_art_view.html?artid=201901030600055&code=910303',
+        'http://news.kmib.co.kr/article/view.asp?arcid=0924053946&code=11131100&cp=nv',
+        'http://news.donga.com/3/all/20190102/93535636/1',
+        'http://www.munhwa.com/news/view.html?no=2019010301070103018001',
+        'http://www.seoul.co.kr/news/newsView.php?id=20190103001010&wlog_tag3=naver',
+        'http://www.hani.co.kr/arti/politics/politics_general/876779.html',
+        'http://www.journalist.or.kr/news/article.html?no=45550'
     ]
+    //urls = []
     for (let i=0;i<urls.length;i++) {
         await crawling(urls[i])
     }
