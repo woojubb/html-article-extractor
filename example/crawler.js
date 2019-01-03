@@ -77,6 +77,11 @@ async function run () {
         'http://www.hani.co.kr/arti/politics/politics_general/876779.html',
         'http://www.journalist.or.kr/news/article.html?no=45550'
     ]
+    urls = [
+        'http://time.com/5486673/bitcoin-venezuela-authoritarian/',
+        'https://www.coindesk.com/bittorrent-is-launching-its-own-cryptocurrency-on-the-tron-network?utm_source=dlvr.it&utm_medium=twitter',
+        'https://cointelegraph.com/news/bitcoin-vs-traditional-assets-how-does-cryptos-10-year-performance-sync-up'
+    ]
     //urls = []
     for (let i=0;i<urls.length;i++) {
         await crawling(urls[i])

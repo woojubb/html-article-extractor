@@ -1,5 +1,5 @@
 # html-article-extractor
-A web page content extractor
+A web page content extractor for News websites
 
 # installation
 ```javascript
