@@ -15,3 +15,11 @@ var body = dom.window.document.body
 result = htmlArticleExtractor(body);
 console.log(result)
 ```
+
+Outputs:
+```
+{
+    html: '<div>contents</div>',
+    text: 'contents'
+}
+```
