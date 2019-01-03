@@ -130,7 +130,7 @@ function getInfo (parent) {
     if (count === 1) {
         return null
     }
-    const tags = ['DIV', 'UL', 'LI', 'OL', 'DL', 'SPAN']
+    const tags = ['DIV', 'UL', 'LI', 'OL', 'DL', 'SPAN', 'A']
     let countTag = 0
     for (let i=0;i<tags.length;i++) {
         countTag += info.tag[tags[i]] || 0
