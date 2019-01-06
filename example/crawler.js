@@ -34,7 +34,7 @@ function doRequest(options) {
             if (error) {
                 reject(error)
             }
-            let enc = charset(res.headers, body)
+            let enc = charset(res.headers || null, body)
             if (!enc) {
                 enc = detectCharacterEncoding(Buffer.from(body)).encoding
             }
@@ -75,14 +75,24 @@ async function run () {
         'http://www.munhwa.com/news/view.html?no=2019010301070103018001',
         'http://www.seoul.co.kr/news/newsView.php?id=20190103001010&wlog_tag3=naver',
         'http://www.hani.co.kr/arti/politics/politics_general/876779.html',
-        'http://www.journalist.or.kr/news/article.html?no=45550'
-    ]
-    urls = [
+        'http://www.journalist.or.kr/news/article.html?no=45550',
         'http://time.com/5486673/bitcoin-venezuela-authoritarian/',
+        'https://twitter.com/i/web/status/1080840232902320128'
+    ]
+    /*
+    urls = [
+        ,
         'https://www.coindesk.com/bittorrent-is-launching-its-own-cryptocurrency-on-the-tron-network?utm_source=dlvr.it&utm_medium=twitter',
         'https://cointelegraph.com/news/bitcoin-vs-traditional-assets-how-does-cryptos-10-year-performance-sync-up'
     ]
+    */
+    // urls = [ 'https://twitter.com/i/web/status/1080840232902320128']
+    // urls = [ 'http://news.hankyung.com/article/201901038780g' ]
+    // urls = [ 'http://news1.kr/articles/?3515212' ]
+    // urls = [ 'http://biz.chosun.com/site/data/html_dir/2019/01/02/2019010202230.html' ]
     //urls = []
+    // urls = [ 'http://www.munhwa.com/news/view.html?no=2019010301070103018001' ]
+    // urls = [ 'https://twitter.com/i/web/status/1080840232902320128' ]
     for (let i=0;i<urls.length;i++) {
         await crawling(urls[i])
     }
@@ -91,7 +101,7 @@ async function run () {
 
 async function crawling (url) {
     console.log('========================================================')
-    console.log('>> url', url)
+    console.log({ url: url })
     console.log('--------------------------------------------------------')
     const contents = await getContents(url)
     const text = contents.body || ''
@@ -99,7 +109,7 @@ async function crawling (url) {
     let window = dom.window
     let document = window.document
     const article = htmlArticleExtractor(document.body)
-    console.log('>> result', article.text)
+    console.log({ result: article.text })
     console.log('========================================================')
 }
 
