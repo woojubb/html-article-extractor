@@ -213,7 +213,7 @@ function getInfo (parent) {
     let score = count / (countTagType + 1) / (countTag + 1)
 	return {
         node: parent,
-        text: cleanText(parent.innerHTML || ''),
+        text: text,
         score: score,
         detail: {
             count: count,
