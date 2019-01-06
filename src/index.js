@@ -33,7 +33,7 @@ function analyzeNode(node){
 	for (let i=0; i < childNodes.length; i++){
         const { tagName, nodeType, innerHTML } = childNodes[i]
 		if (nodeType == 1){
-			if (['DIV', 'ARTICLE', 'SECTION'].includes(tagName)){
+			if (['DIV', 'ARTICLE'].includes(tagName)){
                 const info = getInfo(childNodes[i]);
                 if (info) {
                     /*
@@ -46,6 +46,7 @@ function analyzeNode(node){
                         }
                     })
                     */
+                    
                     if (best.score <= info.score){
                         best = {
                             node: childNodes[i],
@@ -111,7 +112,7 @@ function getChildrenInfo (parent, depth) {
         const { nodeType, tagName, textContent, innerHTML } = childNodes[i]
         if (nodeType == 1){
             result[depth].tag[tagName] = (result[depth].tag[tagName] || 0) + 1
-            if (['DIV', 'UL', 'LI', 'OL', 'DL', 'SPAN', 'TABLE', 'TR', 'TH', 'TD', 'THEAD', 'TBODY', 'TFOOT'].includes(tagName)) {
+            if (['DIV', 'SECTION', 'UL', 'LI', 'OL', 'DL', 'SPAN', 'TABLE', 'TR', 'TH', 'TD', 'THEAD', 'TBODY', 'TFOOT'].includes(tagName)) {
                 result[depth].count++
                 const nextDepth = depth + 1
                 const childrenInfo = getChildrenInfo(childNodes[i], nextDepth)
