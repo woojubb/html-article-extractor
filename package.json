@@ -1,6 +1,6 @@
 {
   "name": "html-article-extractor",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "description": "A web page content extractor for News websites",
   "main": "src/index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "type": "git",
     "url": "http://buffersize.com"
   },
-  "homepage": "https://github.com/jungyoun/html-article-extractor",
+  "homepage": "http://buffersize.com",
   "bugs": "https://github.com/jungyoun/html-article-extractor/issues",
   "keywords": [
     "article",
