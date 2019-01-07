@@ -23,3 +23,11 @@ Outputs:
     text: 'contents'
 }
 ```
+
+# example
+```javascript
+git clone https://github.com/jungyoun/html-article-extractor
+cd html-article-extractor
+npm install
+node example/crawler.js
+```
