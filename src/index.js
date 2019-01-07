@@ -1,6 +1,6 @@
-let DEBUG_MODE = true
-let best = null
-const Info = require('./struct/info')
+var DEBUG_MODE = true
+var best = null
+var Info = require('./struct/info')
 
 function getArticle (dom) {
     initBestArticle()
@@ -29,12 +29,12 @@ function initBestArticle () {
 }
 
 function analyzeNode(node){
-    const { childNodes } = node
-	for (let i=0; i < childNodes.length; i++){
-        const { tagName, nodeType, innerHTML } = childNodes[i]
+    var { childNodes } = node
+	for (var i=0; i < childNodes.length; i++){
+        var { tagName, nodeType, innerHTML } = childNodes[i]
 		if (nodeType == 1){
-			if (['DIV', 'ARTICLE'].includes(tagName)){
-                const info = getInfo(childNodes[i]);
+			if (['DIV', 'ARTICLE'].indexOf(tagName) > -1){
+                var info = getInfo(childNodes[i]);
                 if (info) {
                     /*
                     console.log({
@@ -78,19 +78,19 @@ function cleanText(text) {
 
 function cleanChildrenNode(parent, maxdepth){
     if (maxdepth === 0) {
-        let node = parent.cloneNode(true)
+        var node = parent.cloneNode(true)
         node.innerHTML = ''
         return node
     }
-    let node = parent.cloneNode(true)
-    let { childNodes } = node;
-	for (let i=childNodes.length - 1; i >= 0 ; i--){
-        const { nodeType, tagName, innerHTML } = childNodes[i]
+    var node = parent.cloneNode(true)
+    var { childNodes } = node;
+	for (var i=childNodes.length - 1; i >= 0 ; i--){
+        var { nodeType, tagName, innerHTML } = childNodes[i]
 		if (nodeType === 1){
-            if (['BUTTON', 'INPUT', 'SCRIPT', 'STYLE', 'FORM', 'UL', 'LI', 'OL', 'DL', 'TABLE', 'TR', 'TD', 'TH', 'THEAD', 'TBODY', 'TFOOT'].includes(tagName)) {
+            if (['BUTTON', 'INPUT', 'SCRIPT', 'STYLE', 'FORM', 'UL', 'LI', 'OL', 'DL', 'TABLE', 'TR', 'TD', 'TH', 'THEAD', 'TBODY', 'TFOOT'].indexOf(tagName) > -1) {
                 node.removeChild(childNodes[i])
             } else {
-                const ret = cleanChildrenNode(childNodes[i], maxdepth - 1)
+                var ret = cleanChildrenNode(childNodes[i], maxdepth - 1)
                 childNodes[i].innerHTML = ret.innerHTML
                 // childNodes[i] = ret
             }
@@ -100,30 +100,30 @@ function cleanChildrenNode(parent, maxdepth){
 }
 
 function getChildrenInfo (parent, depth) {
-    let node = parent.cloneNode(true)
+    var node = parent.cloneNode(true)
     depth = depth == null ? 0: depth
 
-    let result = []
-    let info = new Info()
+    var result = []
+    var info = new Info()
     result[depth] = info
 
-    let { childNodes } = node;
-    for (let i=0; i< childNodes.length ; i++){
-        const { nodeType, tagName, textContent, innerHTML } = childNodes[i]
+    var { childNodes } = node;
+    for (var i=0; i< childNodes.length ; i++){
+        var { nodeType, tagName, textContent, innerHTML } = childNodes[i]
         if (nodeType == 1){
             result[depth].tag[tagName] = (result[depth].tag[tagName] || 0) + 1
-            if (['DIV', 'SECTION', 'UL', 'LI', 'OL', 'DL', 'SPAN', 'TABLE', 'TR', 'TH', 'TD', 'THEAD', 'TBODY', 'TFOOT'].includes(tagName)) {
+            if (['DIV', 'SECTION', 'UL', 'LI', 'OL', 'DL', 'SPAN', 'TABLE', 'TR', 'TH', 'TD', 'THEAD', 'TBODY', 'TFOOT'].indexOf(tagName) > -1) {
                 result[depth].count++
-                const nextDepth = depth + 1
-                const childrenInfo = getChildrenInfo(childNodes[i], nextDepth)
+                var nextDepth = depth + 1
+                var childrenInfo = getChildrenInfo(childNodes[i], nextDepth)
                 if (childrenInfo) {
-                    for(let index in childrenInfo) {
+                    for(var index in childrenInfo) {
                         result[index] = result[index] || new Info()
                         result[index] = result[index].merge(childrenInfo[index])
                     }
                 }
             } else {
-                const text = cleanText(strip_tags(childNodes[i].innerHTML))
+                var text = cleanText(strip_tags(childNodes[i].innerHTML))
                 if (text !== '') {
                     result[depth].text.push(text)
                     result[depth].total += text.length || 0
@@ -131,7 +131,7 @@ function getChildrenInfo (parent, depth) {
 
             }
         } else if (nodeType === 3) {
-            const text = cleanText(strip_tags(textContent))
+            var text = cleanText(strip_tags(textContent))
             if (text !== '') {
                 result[depth].text.push(text)
                 result[depth].total += text.length || 0
@@ -144,20 +144,20 @@ function removeDuplicationWord (text) {
     if (!text) {
         return ''
     }
-    let sp = text.split(' ')
+    var sp = text.split(' ')
     if (sp.length === 1) {
         return ''
     }
-    let result = sp.filter( (item, idx, array) => {
+    var result = sp.filter( (item, idx, array) => {
         return array.indexOf( item ) === idx
     })
     return result.join(' ')
 }
 
 function getInfo (parent) {
-    let node = parent.cloneNode(true)
-    let obj = cleanChildrenNode(node, 6)
-    const cleanedText = cleanText(obj.innerHTML || '').trim()
+    var node = parent.cloneNode(true)
+    var obj = cleanChildrenNode(node, 6)
+    var cleanedText = cleanText(obj.innerHTML || '').trim()
     /*
     if (cleanedText !== '' || false) {
         console.log({
@@ -167,20 +167,20 @@ function getInfo (parent) {
         })
     }
     */
-    let text = cleanText(strip_tags(obj.innerHTML))
-    const childrenInfo = getChildrenInfo(obj)
+    var text = cleanText(strip_tags(obj.innerHTML))
+    var childrenInfo = getChildrenInfo(obj)
     if (childrenInfo.length === 0) {
         return null
     }
-    let info = new Info()
+    var info = new Info()
 
-	for (let i=0; i < childrenInfo.length; i++){
+	for (var i=0; i < childrenInfo.length; i++){
         info = info.merge(childrenInfo[i] || null)
     }
     if (!info) {
         return null
     }
-    const count = (removeDuplicationWord(text || '').split(' ')).length
+    var count = (removeDuplicationWord(text || '').split(' ')).length
     if (count === 1) {
         return null
     }
@@ -191,9 +191,9 @@ function getInfo (parent) {
         depth: childrenInfo.length
     })
     */
-    const str = obj.innerHTML
-    const re = /(<([^>]+)>)/ig
-    const countTagInStr = ((str || '').match(re) || []).length
+    var str = obj.innerHTML
+    var re = /(<([^>]+)>)/ig
+    var countTagInStr = ((str || '').match(re) || []).length
     /*
     console.log('>> result', {
         result1: info.tag, 
@@ -201,17 +201,17 @@ function getInfo (parent) {
         html: obj.innerHTML.substring(0, 400)
     })
     */
-    const tags = ['UL', 'LI', 'OL', 'DL', 'TABLE', 'TR', 'TH', 'TD', 'THEAD', 'TBODY', 'TFOOT', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6']
-    let countTag = 0
-    let countTagType = 0
-    let addPoint = 0
+    var tags = ['UL', 'LI', 'OL', 'DL', 'TABLE', 'TR', 'TH', 'TD', 'THEAD', 'TBODY', 'TFOOT', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6']
+    var countTag = 0
+    var countTagType = 0
+    var addPoint = 0
     for (var key in info.tag) {
-        if (tags.includes(key)) {
+        if (tags.indexOf(key) > -1) {
             countTag += info.tag[key] || 0
             countTagType++
         }
     }
-    let score = count / (countTagType + 1) / (countTag + 1)
+    var score = count / (countTagType + 1) / (countTag + 1)
 	return {
         node: parent,
         text: text,
@@ -228,7 +228,7 @@ function getInfo (parent) {
 
 function strip_tags(input, allowed) {
     allowed = (((allowed || '') + '').toLowerCase().match(/<[a-z][a-z0-9]*>/g) || []).join('');
-    let tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
+    var tags = /<\/?([a-z][a-z0-9]*)\b[^>]*>/gi,
         commentsAndPhpTags = /<!--[\s\S]*?-->|<\?(?:php)?[\s\S]*?\?>/gi;
     return input.replace(commentsAndPhpTags, '').replace(tags, function($0, $1) {
         return allowed.indexOf('<' + $1.toLowerCase() + '>') > -1 ? $0 : '';
