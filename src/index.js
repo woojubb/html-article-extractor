@@ -1,6 +1,6 @@
 let DEBUG_MODE = true
 let best = null
-const Info = require('../struct/info')
+const Info = require('./struct/info')
 
 function getArticle (dom) {
     initBestArticle()
