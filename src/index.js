@@ -29,24 +29,14 @@ function initBestArticle () {
 }
 
 function analyzeNode(node){
-    var { childNodes } = node
+    var childNodes = node.childNodes
 	for (var i=0; i < childNodes.length; i++){
-        var { tagName, nodeType, innerHTML } = childNodes[i]
+        var tagName = childNodes[i].tagName
+        var nodeType = childNodes[i].nodeType
 		if (nodeType == 1){
 			if (['DIV', 'ARTICLE'].indexOf(tagName) > -1){
                 var info = getInfo(childNodes[i]);
                 if (info) {
-                    /*
-                    console.log({
-                        analyzeNode: {
-                            html: cleanText(innerHTML || '').substring(0, 400),
-                            info: info,
-                            score: best.score + '=' + info.score,
-                            count: best.detail.count + '=' + info.detail.count
-                        }
-                    })
-                    */
-                    
                     if (best.score <= info.score){
                         best = {
                             node: childNodes[i],
@@ -54,11 +44,6 @@ function analyzeNode(node){
                             score: info.score,
                             detail: info.detail
                         }
-                        /*
-                        console.log({
-                            best: best
-                        })
-                        */
                     } 
                 }
 			}
@@ -83,9 +68,10 @@ function cleanChildrenNode(parent, maxdepth){
         return node
     }
     var node = parent.cloneNode(true)
-    var { childNodes } = node;
+    var childNodes = node.childNodes;
 	for (var i=childNodes.length - 1; i >= 0 ; i--){
-        var { nodeType, tagName, innerHTML } = childNodes[i]
+        var tagName = childNodes[i].tagName
+        var nodeType = childNodes[i].nodeType
 		if (nodeType === 1){
             if (['BUTTON', 'INPUT', 'SCRIPT', 'STYLE', 'FORM', 'UL', 'LI', 'OL', 'DL', 'TABLE', 'TR', 'TD', 'TH', 'THEAD', 'TBODY', 'TFOOT'].indexOf(tagName) > -1) {
                 node.removeChild(childNodes[i])
@@ -107,9 +93,11 @@ function getChildrenInfo (parent, depth) {
     var info = new Info()
     result[depth] = info
 
-    var { childNodes } = node;
+    var childNodes = node.childNodes;
     for (var i=0; i< childNodes.length ; i++){
-        var { nodeType, tagName, textContent, innerHTML } = childNodes[i]
+        var tagName = childNodes[i].tagName
+        var nodeType = childNodes[i].nodeType
+        var textContent = childNodes[i].textContent
         if (nodeType == 1){
             result[depth].tag[tagName] = (result[depth].tag[tagName] || 0) + 1
             if (['DIV', 'SECTION', 'UL', 'LI', 'OL', 'DL', 'SPAN', 'TABLE', 'TR', 'TH', 'TD', 'THEAD', 'TBODY', 'TFOOT'].indexOf(tagName) > -1) {
