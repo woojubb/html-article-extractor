@@ -34,7 +34,7 @@ function analyzeNode(node){
         var tagName = childNodes[i].tagName
         var nodeType = childNodes[i].nodeType
 		if (nodeType == 1){
-			if (['DIV', 'ARTICLE'].indexOf(tagName) > -1){
+			if (['DIV', 'ARTICLE', 'MAIN'].indexOf(tagName) > -1){
                 var info = getInfo(childNodes[i]);
                 if (info) {
                     if (best.score <= info.score){
@@ -73,7 +73,7 @@ function cleanChildrenNode(parent, maxdepth){
         var tagName = childNodes[i].tagName
         var nodeType = childNodes[i].nodeType
 		if (nodeType === 1){
-            if (['BUTTON', 'INPUT', 'SCRIPT', 'STYLE', 'FORM', 'UL', 'LI', 'OL', 'DL', 'TABLE', 'TR', 'TD', 'TH', 'THEAD', 'TBODY', 'TFOOT', 'NOSCRIPT'].indexOf(tagName) > -1) {
+            if (['BUTTON', 'INPUT', 'SCRIPT', 'STYLE', 'FORM', 'UL', 'LI', 'OL', 'DL', 'TABLE', 'TR', 'TD', 'TH', 'THEAD', 'TBODY', 'TFOOT', 'ASIDE', 'HEADER', 'FOOTER', 'NAV', 'NOSCRIPT'].indexOf(tagName) > -1) {
                 node.removeChild(childNodes[i])
             } else {
                 var ret = cleanChildrenNode(childNodes[i], maxdepth - 1)
@@ -100,7 +100,7 @@ function getChildrenInfo (parent, depth) {
         var textContent = childNodes[i].textContent
         if (nodeType == 1){
             result[depth].tag[tagName] = (result[depth].tag[tagName] || 0) + 1
-            if (['DIV', 'SECTION', 'UL', 'LI', 'OL', 'DL', 'SPAN', 'TABLE', 'TR', 'TH', 'TD', 'THEAD', 'TBODY', 'TFOOT'].indexOf(tagName) > -1) {
+            if (['DIV', 'SECTION', 'UL', 'LI', 'OL', 'DL', 'SPAN', 'TABLE', 'TR', 'TH', 'TD', 'THEAD', 'TBODY', 'TFOOT', 'ASIDE', 'HEADER', 'FOOTER', 'NAV'].indexOf(tagName) > -1) {
                 result[depth].count++
                 var nextDepth = depth + 1
                 var childrenInfo = getChildrenInfo(childNodes[i], nextDepth)
@@ -172,24 +172,9 @@ function getInfo (parent) {
     if (count === 1) {
         return null
     }
-    /*
-    console.log('---------------------------------------------------------------')
-    console.log({
-        result: info,
-        depth: childrenInfo.length
-    })
-    */
-    var str = obj.innerHTML
-    var re = /(<([^>]+)>)/ig
-    var countTagInStr = ((str || '').match(re) || []).length
-    /*
-    console.log('>> result', {
-        result1: info.tag, 
-        result2: countTagInStr,
-        html: obj.innerHTML.substring(0, 400)
-    })
-    */
+
     var tags = ['UL', 'LI', 'OL', 'DL', 'TABLE', 'TR', 'TH', 'TD', 'THEAD', 'TBODY', 'TFOOT', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6']
+    var advantageTag = ['P', 'BLOCKQUOTE', 'SECTION', 'ARTICLE', 'MAIN', 'BR']
     var countTag = 0
     var countTagType = 0
     var addPoint = 0
@@ -197,8 +182,12 @@ function getInfo (parent) {
         if (tags.indexOf(key) > -1) {
             countTag += info.tag[key] || 0
             countTagType++
+        } else if (advantageTag.indexOf(key) > -1) {
+            addPoint++
         }
     }
+    countTagType -= addPoint
+    countTagType = countTagType > -1 ? countTagType : 0 
     var score = count / (countTagType + 1) / (countTag + 1)
 	return {
         node: parent,
