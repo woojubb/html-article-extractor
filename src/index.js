@@ -73,7 +73,7 @@ function cleanChildrenNode(parent, maxdepth){
         var tagName = childNodes[i].tagName
         var nodeType = childNodes[i].nodeType
 		if (nodeType === 1){
-            if (['BUTTON', 'INPUT', 'SCRIPT', 'STYLE', 'FORM', 'UL', 'LI', 'OL', 'DL', 'TABLE', 'TR', 'TD', 'TH', 'THEAD', 'TBODY', 'TFOOT'].indexOf(tagName) > -1) {
+            if (['BUTTON', 'INPUT', 'SCRIPT', 'STYLE', 'FORM', 'UL', 'LI', 'OL', 'DL', 'TABLE', 'TR', 'TD', 'TH', 'THEAD', 'TBODY', 'TFOOT', 'NOSCRIPT'].indexOf(tagName) > -1) {
                 node.removeChild(childNodes[i])
             } else {
                 var ret = cleanChildrenNode(childNodes[i], maxdepth - 1)
