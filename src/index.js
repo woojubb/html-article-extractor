@@ -73,12 +73,16 @@ function cleanChildrenNode(parent, maxdepth){
         var tagName = childNodes[i].tagName
         var nodeType = childNodes[i].nodeType
 		if (nodeType === 1){
+            if (childNodes[i].hasAttributes()) {
+                for (var j=childNodes[i].attributes.length - 1;j>=0;j--) {
+                    childNodes[i].removeAttribute(childNodes[i].attributes[j].name)
+                }
+            }
             if (['BUTTON', 'INPUT', 'SCRIPT', 'STYLE', 'FORM', 'UL', 'LI', 'OL', 'DL', 'TABLE', 'TR', 'TD', 'TH', 'THEAD', 'TBODY', 'TFOOT', 'ASIDE', 'HEADER', 'FOOTER', 'NAV', 'NOSCRIPT'].indexOf(tagName) > -1) {
                 node.removeChild(childNodes[i])
             } else {
                 var ret = cleanChildrenNode(childNodes[i], maxdepth - 1)
                 childNodes[i].innerHTML = ret.innerHTML
-                // childNodes[i] = ret
             }
         }
     }
@@ -145,16 +149,6 @@ function removeDuplicationWord (text) {
 function getInfo (parent) {
     var node = parent.cloneNode(true)
     var obj = cleanChildrenNode(node, 6)
-    var cleanedText = cleanText(obj.innerHTML || '').trim()
-    /*
-    if (cleanedText !== '' || false) {
-        console.log({
-            cleanedObj: {
-                html: cleanedText
-            }
-        })
-    }
-    */
     var text = cleanText(strip_tags(obj.innerHTML))
     var childrenInfo = getChildrenInfo(obj)
     if (childrenInfo.length === 0) {
@@ -174,7 +168,7 @@ function getInfo (parent) {
     }
 
     var tags = ['UL', 'LI', 'OL', 'DL', 'TABLE', 'TR', 'TH', 'TD', 'THEAD', 'TBODY', 'TFOOT', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6']
-    var advantageTag = ['P', 'BLOCKQUOTE', 'SECTION', 'ARTICLE', 'MAIN', 'BR']
+    var advantageTag = ['BLOCKQUOTE', 'SECTION', 'ARTICLE', 'MAIN', 'BR', 'HR', 'INS', 'DEL']
     var countTag = 0
     var countTagType = 0
     var addPoint = 0
@@ -183,11 +177,9 @@ function getInfo (parent) {
             countTag += info.tag[key] || 0
             countTagType++
         } else if (advantageTag.indexOf(key) > -1) {
-            addPoint++
+            addPoint += info.tag[key] || 0
         }
     }
-    countTagType -= addPoint
-    countTagType = countTagType > -1 ? countTagType : 0 
     var score = count / (countTagType + 1) / (countTag + 1)
 	return {
         node: parent,
