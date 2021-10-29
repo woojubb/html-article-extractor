@@ -91,7 +91,7 @@ function cleanChildrenNode(parent, maxdepth){
 
 function getChildrenInfo (parent, depth) {
     var node = parent.cloneNode(true)
-    depth = depth == null ? 0: depth
+    depth = depth === null ? 0: depth
 
     var result = []
     var info = new Info()
