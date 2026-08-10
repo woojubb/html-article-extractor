@@ -1,0 +1,32 @@
+{
+  "name": "@html-article-extractor/cli",
+  "version": "1.0.0",
+  "description": "Fetch a URL and extract its readable article content",
+  "main": "dist/cli.js",
+  "types": "dist/cli.d.ts",
+  "bin": {
+    "html-article-extractor": "dist/bin.js"
+  },
+  "files": [
+    "dist/**/*.d.ts",
+    "dist/**/*.js"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "test": "node --import tsx --test test/*.test.ts",
+    "test:coverage": "node --import tsx --experimental-test-coverage --test test/*.test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jungyoun/html-article-extractor.git",
+    "directory": "packages/cli"
+  },
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "html-article-extractor": "^1.1.0",
+    "jsdom": "^27.4.0"
+  }
+}

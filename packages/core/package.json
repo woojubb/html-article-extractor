@@ -1,0 +1,48 @@
+{
+  "name": "html-article-extractor",
+  "version": "1.1.0",
+  "description": "Extract readable article HTML and text from a DOM document",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist/**/*.d.ts",
+    "dist/**/*.js"
+  ],
+  "scripts": {
+    "build": "tsc -b",
+    "test": "node --import tsx --test test/*.test.ts",
+    "test:coverage": "node --import tsx --experimental-test-coverage --test test/*.test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jungyoun/html-article-extractor.git",
+    "directory": "packages/core"
+  },
+  "bugs": "https://github.com/jungyoun/html-article-extractor/issues",
+  "homepage": "https://github.com/jungyoun/html-article-extractor#readme",
+  "keywords": [
+    "article",
+    "content-extraction",
+    "crawler",
+    "html",
+    "readability"
+  ],
+  "author": "jungyoun@gmail.com",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@mozilla/readability": "^0.6.0"
+  },
+  "devDependencies": {
+    "jsdom": "^27.4.0"
+  }
+}

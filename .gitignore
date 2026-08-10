@@ -1,15 +1,48 @@
-.DS_Store
+# === Secrets ===
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+credentials.*
+secrets.*
+**/service-account*.json
+
+# === Dependencies ===
 node_modules/
-/dist/
+.pnpm-store/
+
+# === Build outputs ===
+dist/
+/build/
+/out/
+*.tsbuildinfo
+
+# === OS ===
+.DS_Store
+Thumbs.db
+
+# === Logs ===
+*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-package-lock.json
+pnpm-debug.log*
 
-# Editor directories and files
-.idea
-.vscode
+# === Editor directories and files ===
+.idea/
+.vscode/
+.claude/settings.local.json
 *.suo
 *.ntvs*
 *.njsproj
 *.sln
+*.swp
+*.swo
+*~
+
+# === Coverage / Test ===
+coverage/
+.nyc_output/

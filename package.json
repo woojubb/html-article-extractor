@@ -1,35 +1,30 @@
 {
-  "name": "html-article-extractor",
-  "version": "1.0.14",
-  "description": "A web page content extractor for News websites",
-  "main": "src/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node src/app.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/jungyoun/html-article-extractor.git"
-  },
-  "homepage": "http://buffersize.com",
-  "bugs": "https://github.com/jungyoun/html-article-extractor/issues",
-  "keywords": [
-    "article",
-    "contents",
-    "extract",
-    "crawler",
-    "html"
+  "name": "html-article-extractor-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*"
   ],
-  "author": "jungyoun@gmail.com",
-  "license": "MIT",
-  "dependencies": {},
+  "scripts": {
+    "build": "tsc -b",
+    "clean": "tsc -b --clean",
+    "test": "npm run test --workspaces --if-present",
+    "test:coverage": "npm run test:coverage --workspaces --if-present",
+    "lint": "eslint packages --max-warnings=0",
+    "lint:fix": "eslint packages --fix",
+    "typecheck": "tsc -b --pretty false",
+    "validate": "npm run lint && npm run typecheck && npm test",
+    "prepare": "husky"
+  },
+  "engines": {
+    "node": ">=20"
+  },
   "devDependencies": {
-    "request": "^2.88.0",
-    "jsdom": "^13.1.0",
-    "lodash": "^4.17.11",
-    "buffer": "^5.2.1",
-    "charset": "^1.0.1",
-    "iconv-lite": "^0.4.24",
-    "detect-character-encoding": "^0.7.0"
+    "@types/jsdom": "^27.0.0",
+    "@types/node": "^24.0.0",
+    "eslint": "^9.0.0",
+    "husky": "^9.1.7",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "typescript-eslint": "^8.0.0"
   }
 }
