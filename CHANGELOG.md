@@ -22,6 +22,7 @@
 - article/main 밖 chrome `header`/`footer`가 본문에 합쳐지던 문제
 - 링크 팜과 리스트형 메뉴 `div`가 크기 비례 점수로 본문을 이기던 문제
 - 텍스트 노드 등 비 Document/Element 입력이 비정상 결과를 내던 문제
+- 접근성용 시각숨김 라벨(`VisuallyHidden`, `sr-only` 등)이 본문에 유출되던 문제
 
 ## [@html-article-extractor/cli 1.1.0] - 2026-10-04
 

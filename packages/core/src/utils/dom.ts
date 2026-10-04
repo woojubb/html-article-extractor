@@ -21,6 +21,8 @@ function hintSelectors (): string[] {
     }
     selectors.push('[id*="comment"]', '[id*="Comment"]', '[id*="sidebar"]', '[id*="Sidebar"]')
     selectors.push('[class*="mostRead"]', '[class*="mostViewed"]')
+    selectors.push('[class*="visually-hidden"]', '[class*="VisuallyHidden"]')
+    selectors.push('[class*="sr-only"]', '[class*="screen-reader"]', '[class*="screenReader"]')
     return selectors
 }
 

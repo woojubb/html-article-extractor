@@ -102,6 +102,21 @@ describe('heuristic fallback', function () {
         assert.doesNotMatch(result.text, /Site header promo/i)
     })
 
+    it('drops visually hidden accessibility labels from chrome', function () {
+        const document = new JSDOM(`
+            <div class="content">
+                <div><label><span class="VisuallyHidden-styles__x">Site search</span></label><input type="text"></div>
+                <p>Real article first paragraph with substantial content about the findings.</p>
+                <p>Real article second paragraph with more details and quotes from officials.</p>
+            </div>
+        `).window.document
+
+        const result = extractWithHeuristics(document.body)
+        assert.ok(result)
+        assert.match(result.text, /Real article first paragraph/)
+        assert.doesNotMatch(result.text, /Site search/i)
+    })
+
     it('keeps headers that belong to the article itself', function () {
         const document = new JSDOM(`
             <article>

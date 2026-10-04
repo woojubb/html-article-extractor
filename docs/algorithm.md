@@ -27,7 +27,7 @@ score = textLength * (1 - linkDensity)
       x list gate (0.4x when li-dominant)
 ```
 
-단어 수·링크 밀도는 Boilerpipe의 결과를, 문단과 DOM 단서는 jusText와 Readability의 접근을 반영한다. 링크 밀도 게이트의 0.35 기준은 Boilerpipe의 CleanEval 재검증 규칙에서 가져왔고, 0.5 초과 강감쇠와 리스트(nav) 게이트는 링크 팜·메뉴형 `div`가 크기 단조 점수(`textLength` 비례)에서 본문을 이기는 실패를 막기 위한 것이다. `header`/`footer` 태그 패널티와 article/main 밖 chrome `header`/`footer` 제거는 페이지 크롬이 본문 후보에 합쳐지는 실패를 막는다. 숫자 가중치는 논문을 재현한 값이 아니라 이 프로젝트 fixture에 맞춘 휴리스틱이므로 변경 시 회귀 테스트와 실제 페이지 benchmark가 필요하다.
+단어 수·링크 밀도는 Boilerpipe의 결과를, 문단과 DOM 단서는 jusText와 Readability의 접근을 반영한다. 링크 밀도 게이트의 0.35 기준은 Boilerpipe의 CleanEval 재검증 규칙에서 가져왔고, 0.5 초과 강감쇠와 리스트(nav) 게이트는 링크 팜·메뉴형 `div`가 크기 단조 점수(`textLength` 비례)에서 본문을 이기는 실패를 막기 위한 것이다. `header`/`footer` 태그 패널티와 article/main 밖 chrome `header`/`footer` 제거는 페이지 크롬이 본문 후보에 합쳐지는 실패를 막는다. 접근성용 시각숨김 라벨(`VisuallyHidden`, `sr-only`, `screen-reader`) 제거는 BBC식 내비게이션의 숨김 검색 라벨이 본문에 딸려오던 실제 유출을 막는다. 숫자 가중치는 논문을 재현한 값이 아니라 이 프로젝트 fixture에 맞춘 휴리스틱이므로 변경 시 회귀 테스트와 실제 페이지 benchmark가 필요하다.
 
 fallback 출력의 상대 URL은 소스 문서 `baseURI` 기준으로 절대화하고(Readability의 `_fixRelativeUris`와 동등), `src`가 비어 있는 lazy-image에는 `data-src` 계열을 승격한다(Readability의 `_fixLazyImages`와 동등). 후보에는 항상 복제 루트 자체를 포함해 `<body>` 직속 `<p>` 같은 평면 문서를 처리하고, 5만 요소 초과 입력에서는 2차 경로가 즉시 포기해 2차식 순회 폭증을 막는다.
 

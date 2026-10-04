@@ -1,0 +1,28 @@
+{
+  "outlets": [
+    {
+      "name": "BBC News",
+      "links": [
+        "https://www.bbc.com/news/articles/ckreyjzzzywqo",
+        "https://www.bbc.com/news/articles/c6wyz0r2n0djo",
+        "https://www.bbc.com/news/articles/cmpd0wev8v38o"
+      ]
+    },
+    {
+      "name": "Naver News",
+      "links": [
+        "https://n.news.naver.com/article/001/0016356807",
+        "https://n.news.naver.com/article/025/0003555663",
+        "https://n.news.naver.com/article/003/0014233067"
+      ]
+    },
+    {
+      "name": "The Guardian",
+      "links": [
+        "https://www.theguardian.com/world/2026/oct/04/brazil-presidential-election-lula-flavio-bolsonaro",
+        "https://www.theguardian.com/world/2026/oct/04/russia-strikes-kyiv-bridge-german-chancellor-merz-visits-ukraine",
+        "https://www.theguardian.com/technology/2026/oct/04/viral-amsterdam-chip-shop-court-fabel-friet"
+      ]
+    }
+  ]
+}
