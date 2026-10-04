@@ -29,6 +29,9 @@ Options:
   -h, --help  Show this help
 `
 
+const MAX_RESPONSE_BYTES = 5_000_000
+const FETCH_TIMEOUT_MS = 15_000
+
 export async function run (
     argv: string[],
     dependencies: CliDependencies = { fetch: globalThis.fetch, stdout: process.stdout }
@@ -45,15 +48,20 @@ export async function run (
     const url = validateUrl(options.url)
     const response = await dependencies.fetch(url, {
         headers: {
-            'user-agent': 'html-article-extractor/1.0 (+https://github.com/jungyoun/html-article-extractor)'
+            'user-agent': 'html-article-extractor/1.1 (+https://github.com/jungyoun/html-article-extractor)'
         },
-        redirect: 'follow'
+        redirect: 'follow',
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS)
     })
     if (!response.ok) {
         throw new Error(`Request failed with HTTP ${response.status}`)
     }
 
-    const html = decodeResponse(await response.arrayBuffer(), response.headers.get('content-type'))
+    const buffer = await response.arrayBuffer()
+    if (buffer.byteLength > MAX_RESPONSE_BYTES) {
+        throw new Error('Response body exceeds the 5 MB limit.')
+    }
+    const html = decodeResponse(buffer, response.headers.get('content-type'))
     const document = new JSDOM(html, { url: response.url || url.toString() }).window.document
     const article = getArticle(document)
 
@@ -100,12 +108,32 @@ function validateUrl (input: string): URL {
 }
 
 function decodeResponse (buffer: ArrayBuffer, contentType: string | null): string {
-    const charset = contentType?.match(/charset\s*=\s*["']?([^;"'\s]+)/i)?.[1] || 'utf-8'
+    const headerCharset = contentType?.match(/charset\s*=\s*["']?([^;"'\s]+)/i)?.[1]
+    const charset = headerCharset || sniffCharset(buffer) || 'utf-8'
     try {
         return new TextDecoder(charset).decode(buffer)
     } catch {
         return new TextDecoder('utf-8').decode(buffer)
     }
+}
+
+function sniffCharset (buffer: ArrayBuffer): string | null {
+    const bytes = new Uint8Array(buffer)
+    if (bytes.length >= 2) {
+        if (bytes[0] === 0xFF && bytes[1] === 0xFE) {
+            return 'utf-16le'
+        }
+        if (bytes[0] === 0xFE && bytes[1] === 0xFF) {
+            return 'utf-16be'
+        }
+    }
+    const head = Array.from(bytes.slice(0, 4096)).map(function (byte) {
+        return String.fromCharCode(byte)
+    }).join('')
+    const meta = head.match(/<meta[^>]+charset\s*=\s*["']?([^"'>\s;]+)/i)?.[1] ||
+        head.match(/<meta[^>]+content\s*=\s*["'][^"']*charset\s*=\s*([^"';\s]+)/i)?.[1] ||
+        head.match(/<\?xml[^>]+encoding\s*=\s*["']([^"']+)/i)?.[1]
+    return meta?.trim() || null
 }
 
 function formatArticle (article: { html: string, text: string }, format: OutputFormat): string {

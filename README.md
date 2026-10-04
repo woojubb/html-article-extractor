@@ -39,6 +39,8 @@ npx @html-article-extractor/cli --json https://example.com/article
 ```
 
 CLI는 HTTP(S) URL만 허용하고 Node 내장 `fetch`와 `TextDecoder`를 사용합니다.
+헤더에 charset이 없으면 `<meta charset>`과 XML 선언, UTF-16 BOM을 스니핑하고,
+5MB를 초과하는 응답과 15초를 초과하는 요청은 거부합니다.
 
 ## 추출 방식
 

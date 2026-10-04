@@ -2,14 +2,20 @@ import { Readability } from '@mozilla/readability'
 import type { ArticleResult } from '../types'
 import {
     createExtractionDocument,
-    createResultFromHtml,
-    hasMeaningfulText
+    createResultFromElement,
+    hasMeaningfulText,
+    removeLinkDenseContainers,
+    stripBoilerplateSections,
+    stripCommentSections
 } from '../utils/dom'
 
 export function extractWithReadability (node: Node): ArticleResult | null {
     const document = createExtractionDocument(node)
     if (!document) {
         return null
+    }
+    if (document.documentElement) {
+        stripBoilerplateSections(document.documentElement)
     }
 
     try {
@@ -22,7 +28,11 @@ export function extractWithReadability (node: Node): ArticleResult | null {
             return null
         }
 
-        const result = createResultFromHtml(document, unwrapContent(document, article.content))
+        const container = document.createElement('div')
+        container.innerHTML = unwrapContent(document, article.content)
+        stripCommentSections(container)
+        removeLinkDenseContainers(container)
+        const result = createResultFromElement(container)
         return result && hasMeaningfulText(result.text) ? result : null
     } catch {
         return null

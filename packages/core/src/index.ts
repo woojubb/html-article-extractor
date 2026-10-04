@@ -1,14 +1,14 @@
 import { extractWithHeuristics } from './extractors/heuristic'
 import { extractWithReadability } from './extractors/readability'
 import type { ArticleResult as InternalArticleResult } from './types'
-import { isDomNode } from './utils/dom'
+import { isDocumentOrElement } from './utils/dom'
 
 function emptyArticle (): InternalArticleResult {
     return { html: '', text: '' }
 }
 
 function getArticle (dom: Node | null | undefined): InternalArticleResult {
-    if (!isDomNode(dom)) {
+    if (!isDocumentOrElement(dom)) {
         return emptyArticle()
     }
 

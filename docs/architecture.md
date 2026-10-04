@@ -11,7 +11,7 @@
 1. `index.ts`가 입력을 검증하고 추출기를 조정한다.
 2. `extractors/readability.ts`가 복제 문서에서 Mozilla Readability를 실행한다.
 3. `extractors/heuristic.ts`가 실패 시 텍스트/링크 밀도 기반 후보 점수를 계산한다.
-4. `utils/dom.ts`가 복제, 노이즈 제거, 블록 경계 기반 텍스트 정규화를 제공한다.
+4. `utils/dom.ts`가 복제, 노이즈 제거, 상대 URL 해결, lazy-image 승격, 댓글/보일러플레이트 제거, 링크 밀도 컨테이너 제거, 블록 경계 기반 텍스트 정규화를 제공한다.
 5. 모든 경로는 `ArticleResult` 또는 `null`을 반환하고 public entry point가 빈 결과 계약을 보장한다.
 
 Readability가 입력 DOM을 변경하므로 복제는 필수다. 부분 Element 입력은 별도 HTML 문서로 옮겨 sibling 탐색을 막고 원본 `baseURI`는 `<base>`로 보존한다.
