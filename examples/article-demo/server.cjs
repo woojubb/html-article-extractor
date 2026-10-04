@@ -47,6 +47,52 @@ function decodeBody (buffer, contentType) {
     }
 }
 
+function readableBodyLength (document) {
+    const clone = document.body ? document.body.cloneNode(true) : null
+    if (!clone) {
+        return 0
+    }
+    for (const element of clone.querySelectorAll('script, style, noscript, template')) {
+        element.remove()
+    }
+    return (clone.textContent || '').replace(/\s+/g, ' ').trim().length
+}
+
+function findNewsMetadata (document) {
+    const blocks = []
+    for (const element of document.querySelectorAll('script[type="application/ld+json"]')) {
+        try {
+            const parsed = JSON.parse(element.textContent || '')
+            if (Array.isArray(parsed)) {
+                blocks.push(...parsed)
+            } else if (parsed && typeof parsed === 'object') {
+                if (Array.isArray(parsed['@graph'])) {
+                    blocks.push(...parsed['@graph'])
+                } else {
+                    blocks.push(parsed)
+                }
+            }
+        } catch {
+            continue
+        }
+    }
+    const article = blocks.find(function (block) {
+        const type = block && block['@type']
+        const types = Array.isArray(type) ? type : [type]
+        return types.some(function (name) {
+            return name === 'NewsArticle' || name === 'Article' || name === 'BlogPosting'
+        })
+    })
+    if (!article || (!article.headline && !article.description)) {
+        return null
+    }
+    return {
+        headline: article.headline || '',
+        description: article.description || '',
+        datePublished: article.datePublished || ''
+    }
+}
+
 async function extractFromUrl (input) {
     let url
     try {
@@ -77,6 +123,13 @@ async function extractFromUrl (input) {
     const document = new JSDOM(html, { url: response.url || url.toString() }).window.document
     const article = getArticle(document)
     if (!article.text) {
+        if (readableBodyLength(document) < 200) {
+            const meta = findNewsMetadata(document)
+            throw Object.assign(
+                new Error('이 페이지는 자바스크립트 렌더링이 필요해 본문을 추출할 수 없습니다. 브라우저로 렌더링한 뒤 추출해 주세요.'),
+                meta ? { meta } : {}
+            )
+        }
         throw new Error('본문을 찾지 못했습니다.')
     }
     return {
@@ -101,7 +154,8 @@ const server = http.createServer(function (req, res) {
             sendJson(res, 200, { ok: true, ...result })
         }).catch(function (error) {
             const message = error instanceof Error ? error.message : String(error)
-            sendJson(res, 200, { ok: false, error: message })
+            const meta = error && typeof error.meta === 'object' ? error.meta : undefined
+            sendJson(res, 200, meta ? { ok: false, error: message, meta } : { ok: false, error: message })
         })
         return
     }

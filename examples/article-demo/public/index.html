@@ -54,7 +54,11 @@
     if (!data.ok) {
       stats.textContent = ''
       error.textContent = data.error
-      result.textContent = '아직 결과가 없습니다.'
+      if (data.meta && (data.meta.headline || data.meta.description)) {
+        result.textContent = `(참고용 메타데이터 — 기사 본문이 아닙니다)\n제목: ${data.meta.headline || ''}\n설명: ${data.meta.description || ''}`
+      } else {
+        result.textContent = '아직 결과가 없습니다.'
+      }
       return
     }
     stats.textContent = `URL: ${data.url} / ${data.bytes} bytes / ${data.fetchMs}ms / 텍스트 ${data.textChars}자`
